@@ -24,12 +24,14 @@ public class ThreadLocalTest {
 					int data = new Random().nextInt();
 					
 					System.out.println(Thread.currentThread().getName() + " has put data :" + data);
-					threadData.put(Thread.currentThread(), data);
+					// threadData.put(Thread.currentThread(), data);
 					
-					
-					
-					//new A().getDate();
-					//new B().getDate();
+					MyThreadScopeData instance = MyThreadScopeData.getThreadInstance();
+					instance.setName("name"+data);
+					instance.setAge(data);
+					myThreadScopeData.set(instance);
+					new A().getDate();
+					new B().getDate();
 				}
 				
 			}).start();
@@ -41,8 +43,10 @@ public class ThreadLocalTest {
 	static class A{
 		
 		public void getDate(){
-			int data = threadData.get(Thread.currentThread());
-			System.out.println("A from  "+Thread.currentThread().getName() + " has put data :" + data);
+			MyThreadScopeData myThreadScopeData2 = myThreadScopeData.get();
+			String name = myThreadScopeData2.getName();
+			int age = myThreadScopeData2.getAge();
+			System.out.println("A from  "+Thread.currentThread().getName() + " has put data :" + name );
 			
 		}
 		
@@ -50,8 +54,10 @@ public class ThreadLocalTest {
 
 	static class B{
 		public void getDate(){
-			int data = threadData.get(Thread.currentThread());
-			System.out.println("B from  "+Thread.currentThread().getName() + " has put data :" + data);
+			MyThreadScopeData myThreadScopeData2 = myThreadScopeData.get();
+			String name = myThreadScopeData2.getName();
+			int age = myThreadScopeData2.getAge();
+			System.out.println("B from  "+Thread.currentThread().getName() + " has put data :" + name );
 		}
 	}
 
@@ -67,10 +73,12 @@ class MyThreadScopeData{
 	private MyThreadScopeData(){}
 	
 	// 懒汉式
-	public static synchronized MyThreadScopeData getThreadInstance(){
-		
+	// 因为在操作数据的时候，线程分离，没有操作共同数据，顾不需要synchronized
+	public static /*synchronized*/ MyThreadScopeData getThreadInstance(){
+		MyThreadScopeData instance= map.get();
 		if (instance==null) {
 			instance = new MyThreadScopeData();
+			map.set(instance);
 		}
 		return instance;
 		
@@ -78,8 +86,9 @@ class MyThreadScopeData{
 	// 就创建一个对象，而来多个线程的时候，也是一个，这种不适合
 //	private static MyThreadScopeData instance= new MyThreadScopeData();
 	// 顾改成懒汉式
-	private static MyThreadScopeData instance= null;
+	// private static MyThreadScopeData instance= null;
 	
+	private static ThreadLocal<MyThreadScopeData> map = new  ThreadLocal<MyThreadScopeData>();
 	
 	public String getName() {
 		return name;
