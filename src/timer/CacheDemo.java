@@ -14,11 +14,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class CacheDemo {
 	
 	private Map<String, Object> cache  = new HashMap<String , Object>();
+	// 使用volatile，使“状态标记量”能保证  原子性，可见性，有序性
+	// volatile boolean cacheValid;
+
+	
 	public static void main(String[] args) {
-		
-		
-		
-		
 		
 		
 	}
@@ -40,6 +40,8 @@ public class CacheDemo {
 				try{
 					// Recheck state because another thread might have
 					// acquired write lock and changed state before we did.
+					// 这里的if判断，是因为有三个线程都到这里了，但是有一个已经更改完值了，
+					// 另外几个就不用更改值了，因为对应的是一个key
 					if(value == null){
 						value = "asdfasd";
 					}
@@ -54,8 +56,8 @@ public class CacheDemo {
 		} finally {
 			rwl.readLock().unlock();
 		}
-
 	}
+}
 	/*
 	 * 使用synchronized 会限制读和写，我们在读取数据的过程中，并不想出现阻塞的状况，
 	 * 顾使用读写锁更适合些，只有在写操作的时候，出现线程阻塞
@@ -101,4 +103,4 @@ class CachedData {
    }
  }
 	 */
-}
+
