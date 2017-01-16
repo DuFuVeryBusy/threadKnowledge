@@ -71,7 +71,7 @@ public class Test {
 	}
 	
 	//parseLog方法内部的代码不能改动
-	public synchronized static  void parseLog(String log){
+	public/* synchronized*/ static  void parseLog(String log){
 		System.out.print(Thread.currentThread().getName()+"    ");
 		System.out.println(log+":"+(System.currentTimeMillis()/1000));
 		try {
