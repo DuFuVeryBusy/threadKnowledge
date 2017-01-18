@@ -51,7 +51,6 @@ public class CacheDemo {
 					rwl.writeLock().unlock();
 				}
 			}
-			
 			return value;
 		} finally {
 			rwl.readLock().unlock();

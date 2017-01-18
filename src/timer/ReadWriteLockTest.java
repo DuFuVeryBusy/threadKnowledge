@@ -7,7 +7,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 读写锁 ReadWriteLock 
- * 分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，写锁与写锁互斥，这是由jvm自己控制的，你只要上好相应的锁即可。
+ * 分为读锁和写锁，多个读锁不互斥，读锁与写锁互斥，写锁与写锁互斥，
+ * 这是由jvm自己控制的，你只要上好相应的锁即可。
  * @author zhouht
  *
  */
